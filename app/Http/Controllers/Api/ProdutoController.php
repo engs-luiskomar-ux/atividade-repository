@@ -61,7 +61,7 @@ class ProdutoController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Produto $produto)
+    public function update(Request $request, Produto $produto): ProdutoResource
     {
         $dados = $request->validate([
             'nome' => ['sometimes', 'string', 'max:255'],
@@ -71,7 +71,7 @@ class ProdutoController extends Controller
             'quantidade' => 'sometimes|integer|min:0',
         ]);
 
-        $produto->update($dados);
+        $produto = $this->service->update($produto, $dados);
 
         return new ProdutoResource($produto);
     }
