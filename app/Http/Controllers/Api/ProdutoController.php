@@ -7,20 +7,21 @@ use App\Http\Resources\ProdutoResource;
 use App\Models\Produto;
 use App\Services\ProdutoService;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class ProdutoController extends Controller
 {
-
     public function __construct(private ProdutoService $service) {}
 
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+    public function index(Request $request): AnonymousResourceCollection
     {
-        $filtros = [
-            'search' => $request->query('search'),
-        ];
+        $filtros = $request->validate([
+            'search' => ['nullable', 'string', 'max:255'],
+            'preco_min' => ['nullable', 'numeric', 'min:0'],
+        ]);
 
         return ProdutoResource::collection($this->service->listar($filtros));
     }
