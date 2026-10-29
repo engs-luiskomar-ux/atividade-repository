@@ -36,6 +36,10 @@ class EloquentProdutoRepository implements ProdutoRepositoryInterface
             $query->where('preco', '>=', $filtros['preco_min']);
         }
 
-        return $query->paginate($porPagina);
+        if (isset($filtros['preco_max'])) {
+            $query->where('preco', '<=', $filtros['preco_max']);
+        }
+
+        return $query->paginate($porPagina)->withQueryString();
     }
 }

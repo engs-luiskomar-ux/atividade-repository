@@ -21,6 +21,10 @@ class ProdutoController extends Controller
         $filtros = $request->validate([
             'search' => ['nullable', 'string', 'max:255'],
             'preco_min' => ['nullable', 'numeric', 'min:0'],
+            'preco_max' => [
+                'nullable', 'numeric', 'min:0',
+                ...($request->filled('preco_min') ? ['gte:preco_min'] : []),
+            ],
         ]);
 
         return ProdutoResource::collection($this->service->listar($filtros));
